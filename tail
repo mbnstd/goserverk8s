@@ -1,0 +1,65 @@
+Name:           goserver-76cccb8444-zpwzj
+Namespace:      default
+Priority:       0
+Node:           nedel-cluster-worker/172.19.0.3
+Start Time:     Wed, 26 May 2021 21:59:51 -0300
+Labels:         app=goserver
+                pod-template-hash=76cccb8444
+Annotations:    <none>
+Status:         Pending
+IP:             
+IPs:            <none>
+Controlled By:  ReplicaSet/goserver-76cccb8444
+Containers:
+  goserver:
+    Container ID:   
+    Image:          miguelbn/hello-go:v5.5
+    Image ID:       
+    Port:           <none>
+    Host Port:      <none>
+    State:          Waiting
+      Reason:       ContainerCreating
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     500m
+      memory:  25Mi
+    Requests:
+      cpu:      100m
+      memory:   20Mi
+    Liveness:   http-get http://:8080/healthz delay=0s timeout=1s period=5s #success=1 #failure=1
+    Readiness:  http-get http://:8080/healthz delay=0s timeout=1s period=3s #success=1 #failure=1
+    Startup:    http-get http://:8080/healthz delay=0s timeout=1s period=3s #success=1 #failure=30
+    Environment Variables from:
+      goserver-env     ConfigMap  Optional: false
+      goserver-secret  Secret     Optional: false
+    Environment:       <none>
+    Mounts:
+      /go/myfamily from config (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-qt8dw (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             False 
+  ContainersReady   False 
+  PodScheduled      True 
+Volumes:
+  config:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      configmap-family
+    Optional:  false
+  kube-api-access-qt8dw:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  72s   default-scheduler  Successfully assigned default/goserver-76cccb8444-zpwzj to nedel-cluster-worker
+  Normal  Pulling    71s   kubelet            Pulling image "miguelbn/hello-go:v5.5"

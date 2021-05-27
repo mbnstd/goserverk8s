@@ -16,9 +16,54 @@ spec:
     spec:
       containers:
       - name: goserver
-        image: "miguelbn/hello-go:v4"
-        env:
-          - name: NAME
-            value: "Miguel"
-          - name: AGE
-            value: "37"
+        image: "miguelbn/hello-go:v5.6"
+        imagePullPolicy: IfNotPresent
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 20Mi
+          limits:
+            cpu: 500m
+            memory: 25Mi
+
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 3
+          failureThreshold: 30
+
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 3
+          failureThreshold: 1
+
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 5
+          failureThreshold: 1
+          timeoutSeconds: 1
+          successThreshold: 1
+
+        envFrom:
+          - configMapRef:
+              name: goserver-env
+          - secretRef:
+              name: goserver-secret
+
+        volumeMounts:
+          - mountPath: "/go/myfamily"
+            name: config
+
+      volumes:
+        - name: config
+          configMap:
+            name: configmap-family
+            items:
+            - key: members
+              path: "family.txt"
